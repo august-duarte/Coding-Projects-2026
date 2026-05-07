@@ -1,0 +1,3 @@
+Nome: Ana | Tel: 9999-1111 | Endereço: Rua A | CEP: 70000-000 
+Nome: Augusto Duarte | Tel: 51997236551 | Endereço: Goncalves dias 170 | CEP: 90130-060 
+Nome: Bruno | Tel: 8888-2222 | Endereço: Rua B | CEP: 80000-000 

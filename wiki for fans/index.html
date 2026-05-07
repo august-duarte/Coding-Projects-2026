@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adventure Time</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: url("images/background.png") center 40% / cover no-repeat;
+    }
+
+    .card:hover img {
+      transform: scale(1.05);
+      filter: brightness(0.85);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen m-0 font-sans">
+  <div class="absolute top-0 left-[300px] w-[1320px] h-full bg-white/20 backdrop-blur-[6px] -z-0"></div>
+
+  <div id="grid" class="relative z-[1] grid grid-cols-4 gap-6 w-[1200px] ml-[360px] pt-[60px]"></div>
+
+  <div id="modal" class="fixed inset-0 z-[999] hidden items-center justify-center bg-black/45">
+    <div class="relative w-[70%] max-w-[900px] max-h-[80vh] overflow-y-auto rounded-[20px] bg-white p-[30px] text-[#222] leading-[1.6] shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
+      <button
+        id="close-modal"
+        class="absolute top-[15px] right-[20px] border-none bg-transparent text-[32px] text-[#444] cursor-pointer hover:text-black"
+        aria-label="Close modal"
+      >
+        &times;
+      </button>
+
+      <div id="info"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

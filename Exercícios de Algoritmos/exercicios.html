@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercícios JavaScript</title>
+  <style>
+    /* Criando o layout em colunas */
+    #container-geral {
+      display: grid;
+      /* Cria colunas que se ajustam sozinhas ou defina um número fixo */
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      align-items: start;
+    }
+
+    .coluna-exercicios {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .coluna-exercicios h3 {
+      margin-top: 0;
+      font-size: 14px;
+      color: #333;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    .btn-exercicio {
+      cursor: pointer;
+      padding: 5px;
+      text-align: left;
+    }
+
+    #container-conteudo {
+      margin-top: 30px;
+      padding: 20px;
+      font-weight: bold;
+      border-top: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+    <h1>Painel de Exercícios</h1>
+
+    <div id="container-geral"></div>
+    
+    <div id="container-conteudo"></div>
+
+    <button onclick="apagar()">Apagar conteúdo</button>
+  <script>
+    // Definição das categorias baseada nos seus arquivos
+    const categorias = [
+      { titulo: "CONDIÇÕES BÁSICAS", inicio: 17, fim: 25 },
+      { titulo: "CONDIÇÕES COMPOSTAS", inicio: 26, fim: 37 },
+      { titulo: "REPETIÇÕES ENQUANTO", inicio: 38, fim: 55 },
+      { titulo: "ENQUANTO COM FLAG", inicio: 56, fim: 60 },
+      { titulo: "REPETIÇÃO COM FAÇA ENQUANTO", inicio: 61, fim: 63 },
+      { titulo: "REPETIÇÃO COM PARA", inicio: 64, fim: 70 },
+      { titulo: "VETORES", inicio: 71, fim: 85 },
+      { titulo: "PROCEDIMENTOS", inicio: 86, fim: 94 },
+      { titulo: "FUNÇÕES", inicio: 95, fim: 100 }
+    ];
+    function apagar() {
+      const container = document.getElementById("container-conteudo");
+      if (container) container.innerHTML = ``
+    }
+    function modificarConteudo(novoTexto) {
+      const container = document.getElementById("container-conteudo");
+      if (container) container.innerHTML += novoTexto + `<br>`;
+    }
+
+    const containerGeral = document.querySelector('#container-geral');
+
+    // Gerando as colunas e os botões
+    categorias.forEach(cat => {
+      // Cria a div da coluna
+      const divColuna = document.createElement('div');
+      divColuna.classList.add('coluna-exercicios');
+
+      // Cria o título da coluna
+      const titulo = document.createElement('h3');
+      titulo.textContent = cat.titulo;
+      divColuna.appendChild(titulo);
+
+      // Cria os botões daquela faixa
+      for (let i = cat.inicio; i <= cat.fim; i++) {
+        const botao = document.createElement('button');
+        botao.textContent = `Exercício ${i}`;
+        botao.classList.add('btn-exercicio');
+        
+        botao.addEventListener('click', () => {
+          const nomeDaFuncao = `exercicio${i}`;
+          if (typeof window[nomeDaFuncao] === "function") {
+            window[nomeDaFuncao]();
+          } else {
+            console.log(`A função ${nomeDaFuncao} ainda não foi criada.`);
+            modificarConteudo(`A função ${nomeDaFuncao} ainda não foi criada.`);
+          }
+        });
+
+        divColuna.appendChild(botao);
+      }
+
+      containerGeral.appendChild(divColuna);
+    });
+  </script>
+
+  <script src="scripts/17 - 25.js"></script>
+  <script src="scripts/26 - 37.js"></script>
+  <script src="scripts/38 - 55.js"></script>
+  <script src="scripts/56 - 60.js"></script>
+  <script src="scripts/61 - 63.js"></script>
+  <script src="scripts/64 - 70.js"></script>
+  <script src="scripts/71 - 85.js"></script>
+  <script src="scripts/86 - 94.js"></script>
+  <script src="scripts/95 - 100.js"></script>
+
+</body>
+</html>

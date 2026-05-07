@@ -1,0 +1,6 @@
+Nome: Cabo HDMI | Valor: 35 
+Nome: Monitor 24" | Valor: 900 
+Nome: Mouse Gamer | Valor: 96 
+Nome: Pen Drive 64GB | Valor: 55 
+Nome: Teclado Mecanico | Valor: 210 
+Nome: WebCam HD | Valor: 120 
