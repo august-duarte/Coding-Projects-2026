@@ -1,5 +1,6 @@
 import PageCard from "../components/layout/PageCard"
 import { Link } from "react-router-dom"
+import PastPollsPanels from "../features/polls/PastPollsPanels"
 
 function HomePage() {
   return (
@@ -10,8 +11,8 @@ function HomePage() {
         </PageCard>
       </Link>
 
-      <PageCard ariaLabel="Enquetes passadas">
-        Enquetes passadas
+      <PageCard ariaLabel="Enquetes passadas" className="items-stretch justify-start">
+        <PastPollsPanels />
       </PageCard>
     </>
   )
