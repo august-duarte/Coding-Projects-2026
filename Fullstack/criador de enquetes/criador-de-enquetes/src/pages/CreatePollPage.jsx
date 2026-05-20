@@ -1,57 +1,62 @@
+import AddQuestionButton from "../features/polls/AddQuestionButton"
+import ChoiceAnswers from "../features/polls/ChoiceAnswers"
 import PollForm from "../features/polls/PollForm"
+import RemoveQuestionButton from "../features/polls/RemoveQuestionButton"
+import TextAnswer from "../features/polls/TextAnswer"
 import { useState } from "react"
+
+const ANSWER_TYPES = [
+  { id: "single", label: "Única escolha" },
+  { id: "multiple", label: "Múltipla escolha" },
+  { id: "text", label: "Texto" },
+]
+
+function createEmptyQuestion() {
+  return {
+    text: "",
+    answerType: "single",
+    options: [""],
+    textAnswer: "",
+  }
+}
 
 function CreatePollPage() {
   const [title, setTitle] = useState("")
-  const [questionCount, setQuestionCount] = useState(1)
-  const [questions, setQuestions] = useState([""])
+  const [questions, setQuestions] = useState([createEmptyQuestion()])
 
-  function updateQuestion(index, value) {
-    setQuestions((prev) => {
-      const next = [...prev]
-      next[index] = value
-      return next
-    })
+  function updateQuestion(index, updates) {
+    setQuestions((prev) =>
+      prev.map((question, i) =>
+        i === index ? { ...question, ...updates } : question
+      )
+    )
   }
 
-  function removeQuestion(index) {
-    function handleRemoveQuestion() {
-      if (questionCount <= 1) return
+  function handleAddQuestion() {
+    setQuestions((prev) => [...prev, createEmptyQuestion()])
+  }
 
-      setQuestionCount((prev) => prev - 1)
-      setQuestions((prev) =>
-        prev.filter((_, i) => i !== index)
+  function handleRemoveQuestion(index) {
+    if (questions.length <= 1) return
+    setQuestions((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  function renderAnswers(question, index) {
+    if (question.answerType === "single" || question.answerType === "multiple") {
+      return (
+        <ChoiceAnswers
+          variant={question.answerType}
+          options={question.options}
+          onChange={(options) => updateQuestion(index, { options })}
+        />
       )
     }
 
     return (
-      <button
-        type="button"
-        onClick={handleRemoveQuestion}
-        disabled={questionCount <= 1}
-        className="flex w-8 shrink-0 self-stretch items-center justify-center rounded-lg border border-zinc-600 bg-zinc-900/60 text-lg font-medium text-zinc-100 transition-colors hover:border-zinc-500 hover:bg-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-zinc-600 disabled:hover:bg-zinc-900/60"
-        aria-label={`Remover pergunta ${index + 1}`}
-      >
-        −
-      </button>
-    )
-  }
-
-  function addQuestion() {
-    function handleAddQuestion() {
-      setQuestionCount((prev) => prev + 1)
-      setQuestions((prev) => [...prev, ""])
-    }
-
-    return (
-      <button
-        type="button"
-        onClick={handleAddQuestion}
-        className="flex h-10 w-10 shrink-0 items-center justify-center self-start rounded-lg border border-zinc-600 bg-zinc-900/60 text-xl font-medium text-zinc-100 transition-colors hover:border-zinc-500 hover:bg-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-500"
-        aria-label="Adicionar pergunta"
-      >
-        +
-      </button>
+      <TextAnswer
+        value={question.textAnswer}
+        onChange={(textAnswer) => updateQuestion(index, { textAnswer })}
+      />
     )
   }
 
@@ -65,18 +70,48 @@ function CreatePollPage() {
         inputClassName="py-3 text-xl font-semibold sm:text-2xl"
       />
 
-      {Array.from({ length: questionCount }, (_, index) => (
-        <PollForm
-          key={index}
-          label={`Pergunta ${index + 1}`}
-          value={questions[index] ?? ""}
-          onChange={(value) => updateQuestion(index, value)}
-          placeholder="Insira texto aqui"
-          action={removeQuestion(index)}
-        />
+      {questions.map((question, index) => (
+        <div key={index} className="flex flex-col gap-2">
+          <PollForm
+            label={`Pergunta ${index + 1}`}
+            value={question.text}
+            onChange={(text) => updateQuestion(index, { text })}
+            placeholder="Insira texto aqui"
+            action={
+              <RemoveQuestionButton
+                index={index}
+                disabled={questions.length <= 1}
+                onRemove={() => handleRemoveQuestion(index)}
+              />
+            }
+          />
+
+          <div
+            className="ml-6 flex flex-wrap gap-2 pl-4"
+            role="group"
+            aria-label={`Tipo de resposta da pergunta ${index + 1}`}
+          >
+            {ANSWER_TYPES.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => updateQuestion(index, { answerType: id })}
+                className={`rounded-lg border px-3 py-1.5 text-sm transition-colors focus:outline-none focus:ring-1 focus:ring-zinc-500 ${
+                  question.answerType === id
+                    ? "border-zinc-400 bg-zinc-800 text-zinc-100"
+                    : "border-zinc-600 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {renderAnswers(question, index)}
+        </div>
       ))}
 
-      {addQuestion()}
+      <AddQuestionButton onAdd={handleAddQuestion} />
     </div>
   )
 }
