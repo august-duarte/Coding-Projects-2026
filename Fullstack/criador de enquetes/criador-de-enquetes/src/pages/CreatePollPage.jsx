@@ -1,5 +1,6 @@
 import AddQuestionButton from "../features/polls/AddQuestionButton"
 import ChoiceAnswers from "../features/polls/ChoiceAnswers"
+import { savePoll } from "../lib/pollStorage"
 import PollForm from "../features/polls/PollForm"
 import RemoveQuestionButton from "../features/polls/RemoveQuestionButton"
 import TextAnswer from "../features/polls/TextAnswer"
@@ -39,6 +40,16 @@ function CreatePollPage() {
   function handleRemoveQuestion(index) {
     if (questions.length <= 1) return
     setQuestions((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  function handleSave() {
+    savePoll({
+      id: crypto.randomUUID(),
+      title,
+      questions,
+    })
+    setTitle("")
+    setQuestions([createEmptyQuestion()])
   }
 
   function renderAnswers(question, index) {
@@ -112,6 +123,14 @@ function CreatePollPage() {
       ))}
 
       <AddQuestionButton onAdd={handleAddQuestion} />
+
+      <button
+        type="button"
+        onClick={handleSave}
+        className="self-start rounded-lg border border-zinc-400 bg-zinc-800 px-4 py-2 text-sm font-medium text-zinc-100 transition-colors hover:border-zinc-500 hover:bg-zinc-700 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+      >
+        Save
+      </button>
     </div>
   )
 }
