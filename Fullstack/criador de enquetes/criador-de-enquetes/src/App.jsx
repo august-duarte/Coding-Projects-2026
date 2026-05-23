@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom"
 import AppShell from "./components/layout/AppShell"
 import HomePage from "./pages/HomePage"
 import CreatePollPage from "./pages/CreatePollPage"
+import AnswerPollPage from "./pages/AnswerPollPage"
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Route element={<AppShell />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/criar" element={<CreatePollPage />} />
+        <Route path="/responder-enquete/:id" element={<AnswerPollPage />} />
       </Route>
     </Routes>
   )

@@ -47,6 +47,7 @@ function CreatePollPage() {
       id: crypto.randomUUID(),
       title,
       questions,
+      createdAt: new Date().toISOString(),
     })
     setTitle("")
     setQuestions([createEmptyQuestion()])
