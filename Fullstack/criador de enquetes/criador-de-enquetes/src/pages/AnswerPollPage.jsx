@@ -1,7 +1,15 @@
+import { useState } from "react"
 import { useParams } from "react-router-dom"
+import { VARIANTS } from "../features/polls/ChoiceAnswers"
+import TextAnswer from "../features/polls/TextAnswer"
 import getPolls from "../lib/pollStorage"
 
+const CHOICE_ROW_CLASS = "flex items-start gap-2"
+const CHOICE_GROUP_CLASS =
+  "ml-6 flex flex-col gap-2 border-l border-zinc-700 pl-4"
+
 function AnswerPollPage() {
+  const [answers, setAnswers] = useState({})
   const { id } = useParams()
   const found = getPolls().find((p) => p.id === id)
   const poll = found ? JSON.parse(JSON.stringify(found)) : null
@@ -10,6 +18,91 @@ function AnswerPollPage() {
     return (
       <p className="text-sm text-zinc-400">Enquete não encontrada.</p>
     )
+  }
+
+  function renderAnswerInput(question, questionIndex) {
+    switch (question.answerType) {
+      case "text":
+        return (
+          <TextAnswer
+            value={answers[questionIndex] ?? ""}
+            onChange={(text) =>
+              setAnswers((prev) => ({ ...prev, [questionIndex]: text }))
+            }
+          />
+        )
+
+      case "single": {
+        const { inputType, inputClassName } = VARIANTS.single
+        const selected = answers[questionIndex]
+
+        return (
+          <div className={CHOICE_GROUP_CLASS}>
+            {question.options.map((option, optionIndex) => (
+              <label
+                key={optionIndex}
+                className={CHOICE_ROW_CLASS}
+              >
+                <input
+                  type={inputType}
+                  className={inputClassName}
+                  name={`question-${questionIndex}`}
+                  value={optionIndex}
+                  checked={selected === optionIndex}
+                  onChange={() =>
+                    setAnswers((prev) => ({
+                      ...prev,
+                      [questionIndex]: optionIndex,
+                    }))
+                  }
+                />
+                <span className="text-sm text-zinc-100">
+                  {option || `Opção ${optionIndex + 1}`}
+                </span>
+              </label>
+            ))}
+          </div>
+        )
+      }
+
+      case "multiple": {
+        const { inputType, inputClassName } = VARIANTS.multiple
+        const selected = answers[questionIndex] ?? []
+
+        return (
+          <div className={CHOICE_GROUP_CLASS}>
+            {question.options.map((option, optionIndex) => (
+              <label
+                key={optionIndex}
+                className={CHOICE_ROW_CLASS}
+              >
+                <input
+                  type={inputType}
+                  className={inputClassName}
+                  value={optionIndex}
+                  checked={selected.includes(optionIndex)}
+                  onChange={() => {
+                    setAnswers((prev) => {
+                      const current = prev[questionIndex] ?? []
+                      const next = current.includes(optionIndex)
+                        ? current.filter((i) => i !== optionIndex)
+                        : [...current, optionIndex]
+                      return { ...prev, [questionIndex]: next }
+                    })
+                  }}
+                />
+                <span className="text-sm text-zinc-100">
+                  {option || `Opção ${optionIndex + 1}`}
+                </span>
+              </label>
+            ))}
+          </div>
+        )
+      }
+
+      default:
+        return null
+    }
   }
 
   return (

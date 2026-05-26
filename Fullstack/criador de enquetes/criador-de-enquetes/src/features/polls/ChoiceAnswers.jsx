@@ -5,7 +5,7 @@ import RemoveQuestionButton from "./RemoveQuestionButton"
 const INDENT_CLASS =
   "ml-6 flex flex-col gap-2 border-l border-zinc-700 pl-4"
 
-const VARIANTS = {
+export const VARIANTS = {
   single: {
     label: "Opções (escolha única)",
     inputType: "radio",
