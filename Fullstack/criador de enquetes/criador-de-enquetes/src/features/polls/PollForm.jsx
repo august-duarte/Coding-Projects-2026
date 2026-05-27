@@ -7,6 +7,7 @@ function PollForm({
   inputClassName = "",
   maxLength,
   action,
+  disabled = false,
 }) {
   return (
     <label
@@ -22,7 +23,8 @@ function PollForm({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           maxLength={maxLength}
-          className={`min-w-0 flex-1 rounded-lg border border-zinc-600 bg-zinc-900/60 px-3 py-2 text-base text-zinc-100 placeholder:text-zinc-500 transition-colors focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 ${inputClassName}`}
+          disabled={disabled}
+          className={`min-w-0 flex-1 rounded-lg border border-zinc-600 bg-zinc-900/60 px-3 py-2 text-base text-zinc-100 placeholder:text-zinc-500 transition-colors focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500 disabled:cursor-not-allowed disabled:opacity-70 ${inputClassName}`}
         />
         {action}
       </div>

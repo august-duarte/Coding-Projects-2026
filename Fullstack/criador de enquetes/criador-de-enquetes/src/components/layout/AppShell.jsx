@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation } from "react-router-dom"
 
 function AppShell() {
   const { pathname } = useLocation()
-  const isCreatePage = pathname === "/criar"
+  const showBackButton = pathname !== "/"
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-200">
@@ -11,7 +11,7 @@ function AppShell() {
         aria-label="Área do aplicativo"
       >
         <header className="relative flex shrink-0 items-center justify-center px-6 py-4">
-          {isCreatePage && (
+          {showBackButton && (
             <Link
               to="/"
               className="absolute left-6 flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-600 bg-zinc-900/60 text-lg font-medium text-zinc-100 transition-colors hover:border-zinc-500 hover:bg-zinc-800 focus:outline-none focus:ring-1 focus:ring-zinc-500"

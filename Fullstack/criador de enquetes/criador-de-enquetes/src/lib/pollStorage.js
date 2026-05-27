@@ -17,4 +17,33 @@ export function savePoll(poll) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...polls, poll]))
 }
 
+export function saveResponse(pollId, answers) {
+  const polls = getPolls()
+  const index = polls.findIndex((poll) => poll.id === pollId)
+  if (index === -1) return false
+
+  const response = {
+    id: crypto.randomUUID(),
+    submittedAt: new Date().toISOString(),
+    answers,
+  }
+
+  const poll = polls[index]
+  polls[index] = {
+    ...poll,
+    responses: [...(poll.responses ?? []), response],
+  }
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(polls))
+  return true
+}
+
+export function deletePoll(pollId) {
+  const polls = getPolls()
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(polls.filter((poll) => poll.id !== pollId))
+  )
+}
+
 export default getPolls

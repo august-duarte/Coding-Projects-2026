@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import getPolls from "../../lib/pollStorage"
+import getPolls, { deletePoll } from "../../lib/pollStorage"
 
 function usePolls() {
   const [polls, setPolls] = useState([])
@@ -8,7 +8,12 @@ function usePolls() {
     setPolls(getPolls())
   }, [])
 
-  return { polls }
+  function removePoll(pollId) {
+    deletePoll(pollId)
+    setPolls((prev) => prev.filter((poll) => poll.id !== pollId))
+  }
+
+  return { polls, removePoll }
 }
 
 export default usePolls
